@@ -5,6 +5,7 @@
 
 
 from pythonds.trees import BinaryTree
+import operator
 
 def printexp(tree):
     sVal = ""
@@ -23,9 +24,9 @@ def postordereval(tree):
         res1 = postordereval(tree.getLeftChild())
         res2 = postordereval(tree.getRightChild())
         if res1 and res2:
-            return opers[tree.getRoolVal()](res1,res2)
+            return opers[tree.getRootVal()](res1,res2)
         else:
-            return tree.getRoolVal()
+            return tree.getRootVal()
 
 x = BinaryTree('*')
 x.insertLeft('+')
