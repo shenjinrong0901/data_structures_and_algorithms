@@ -5,7 +5,7 @@ class BinHeap:
         self.heapList = [0]
         self.currentSize = 0
 
-    # percUp方法
+    # percUp方法，新key的上浮
     def percUp(self, i):
         while i // 2 > 0:
             if self.heapList[i] < self.heapList[i // 2]:
@@ -20,7 +20,8 @@ class BinHeap:
         self.currentSize = self.currentSize + 1
         self.percUp(self.currentSize)
 
-    # percDown方法
+    # percDown方法，将新的根节点沿着一条路径"下沉"，直达比两个子节点都小
+    #在"下沉"时，要选择两个子节点中较小的一个节点来比较，进行下沉
     def percDown(self, i):
         while (i * 2) <= self.currentSize:
             mc = self.minChild(i)
@@ -40,7 +41,7 @@ class BinHeap:
             else:
                 return i * 2 + 1
 
-    # 从二叉堆中删除最小的元素
+    # 从二叉堆中删除最小的元素，也就是二叉堆的根节点！
     def delMin(self):
         retval = self.heapList[1]     #移走堆顶
         self.heapList[1] = self.heapList[self.currentSize]
@@ -49,4 +50,14 @@ class BinHeap:
         self.percDown(1)      #新顶下沉
         return retval
 
+    #根据元素列表构建堆，从无序列表生成"堆"
+    def buildHeap(self,alist):
+        i = len(alist) // 2
+        self.currentSize = len(alist)
+        self.heapList = [0] + alist[:]
+        while(i>0):
+            print(self.heapList,i)
+            self.percDown(i)
+            i = i - 1
+        print(self.heapList,i)
 #EP67
