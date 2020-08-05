@@ -44,5 +44,8 @@ print(n)
 op1 = operator.mul
 m = op1(1,3)
 print(m)
+op2 = operator.truediv
+o = op2(3,1)
+print(o)
 
 
