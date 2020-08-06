@@ -14,8 +14,7 @@ class BinarySearchTree:
         return self.root.__iter__()
 
 class TreeNode:
-    def __init__(self,key,val,left=None,\
-                 right=None,parent=None):
+    def __init__(self,key,val,left=None,right=None,parent=None):
         self.key = key
         self.payload = val
         self.leftChild = left
