@@ -16,17 +16,17 @@ class BinarySearchTree:
 class TreeNode:
     def __init__(self,key,val,left=None,right=None,parent=None):
         self.key = key
-<<<<<<< HEAD
+
         self.payload = val  #payload为其所包含的数据项，既与键值所关联的一对数据
         self.leftChild = left
         self.rightChild = right
         self.parent = parent   #parent是用来指向其父节点的，方便后面回溯的操作。若不用此方法，也可以用一个堆栈来处理
-=======
+
         self.payload = val
         self.leftChild = left
         self.rightChild = right
         self.parent = parent
->>>>>>> github/master
+
 
     #判断是否拥有左子节点
     def hasLeftChild(self):
@@ -50,11 +50,11 @@ class TreeNode:
 
     #判断是否是叶子节点
     def isLeaf(self):
-<<<<<<< HEAD
+
         return not (self.rightChild or self.leftChild)
-=======
+
         return not (self.rightChild or leftChild)
->>>>>>> github/master
+
 
     #判断是否有任何子节点
     def hasAnyChildren(self):
@@ -74,7 +74,7 @@ class TreeNode:
             self.leftChild.parent = self
         if self.hasRightChild():
             self.rightChild.parent = self
-<<<<<<< HEAD
+
 
 #put辅助方法
 # 如果key比currentNode小，那么_put到左子树，但如果没有左子树，那么key就成为当前节点的左子节点
@@ -94,5 +94,4 @@ def _put(self,key,val,currentNode):
 #索引赋值
 def __setitem__(self,k,v):
     self._put(k,v)
-=======
->>>>>>> github/master
+
