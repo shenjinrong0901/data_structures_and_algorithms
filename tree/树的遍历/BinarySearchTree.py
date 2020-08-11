@@ -95,3 +95,44 @@ def _put(self,key,val,currentNode):
 def __setitem__(self,k,v):
     self._put(k,v)
 
+#查找建对应的值
+def get(self,key):
+    if self.root:
+        res = self._get(key, self.root)
+        if res:
+            return res.payload
+        else:
+            return None
+    else:
+        return None
+
+def _get(self,key,currentNode):
+    if not currentNode:
+        return None
+    elif currentNode.key == key:
+        return currentNode
+    elif key < currentNode.key:
+        return self._get(key,currentNode.leftChild)
+    else:
+        return self._get(key,currentNode.rightChild)
+
+def __getitem__(self,key):
+    return self.get(key)
+
+def __contains__(self,key):
+    if self.get(key,self.root):
+        return True
+    else:
+        return False
+
+#迭代器
+def __iter__(self):
+    if self:
+        if self.hasLeftChild():
+            for elem in self.leftChild:
+                yield elem
+        yield self.key
+        if self.hasRightChild():
+            for elem in self.rightChild:
+                yield elem
+
