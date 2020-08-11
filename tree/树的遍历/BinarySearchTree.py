@@ -75,6 +75,12 @@ class TreeNode:
         if self.hasRightChild():
             self.rightChild.parent = self
 
+def put(self,key,val):
+    if self.root:
+        self._put(key,val,self.root)
+    else:
+        self.root = TreeNode(key,val)
+    self.size = self.size + 1
 
 #put辅助方法
 # 如果key比currentNode小，那么_put到左子树，但如果没有左子树，那么key就成为当前节点的左子节点
@@ -98,9 +104,9 @@ def __setitem__(self,k,v):
 #查找建对应的值
 def get(self,key):
     if self.root:
-        res = self._get(key, self.root)
+        res = self._get(key, self.root)   #递归函数_get()
         if res:
-            return res.payload
+            return res.payload     #找到节点
         else:
             return None
     else:
@@ -110,29 +116,92 @@ def _get(self,key,currentNode):
     if not currentNode:
         return None
     elif currentNode.key == key:
-        return currentNode
-    elif key < currentNode.key:
+        return currentNode            #如果currentNode是我们要找的，则返回这个值
+    elif key < currentNode.key:       #如果我们要找的key小于currentNode，则返回该节点的左子树来进行递归
         return self._get(key,currentNode.leftChild)
-    else:
+    else:                             #如果我们要找的key大于currentNode，则返回该节点的右子树来进行递归
         return self._get(key,currentNode.rightChild)
 
-def __getitem__(self,key):
+#索引的取值
+def __getitem__(self,key):            #python内置的一种特殊的方法，对用python中的get方法
     return self.get(key)
 
-def __contains__(self,key):
+#索引的归属判断
+def __contains__(self,key):           #python内置的一种特殊的方法，对应python中的in操作符
     if self.get(key,self.root):
         return True
     else:
         return False
 
-#迭代器
-def __iter__(self):
-    if self:
-        if self.hasLeftChild():
+#迭代器，我们可以用for循环来枚举字典中的所有的key
+#已中序遍历的顺序来迭代
+def __iter__(self):                  #python内中的一种特殊的方法，直接调用TreeNode中的同名方法
+    if self:                         #根节点不是为空的话
+        if self.hasLeftChild():      #当左子树不为空
             for elem in self.leftChild:
-                yield elem
+                yield elem           #迭代器中，得用yield语句，来返回一个值
         yield self.key
         if self.hasRightChild():
             for elem in self.rightChild:
                 yield elem
 
+#删除
+#用_get找到要删除的节点，然后调用remove来删除，找不到的话则提示错误
+#注意：在delete中，最复杂的就是找到key对应的节点之后的remove节点的方法！
+    #因为在remove一个节点之后，还要求任然保持BST的性质
+def delete(self,key):
+    if self.size > 1:
+        nodeToRemove = self._get(key,self.root)
+        if nodeToRemove:
+            self.remove(nodeToRemove)
+            self.size = self.size - 1
+        else:
+            raise KeyError('Error,key not in tree')
+    elif self.size == 1 and self.root.key == key:
+        self.root = None
+        self.size = self.size - 1
+    else:
+        raise KeyError('Error,key not in tree')
+
+def __delitem__(self,key):          #python内置的特殊方法，来调用delete()
+    self.delete(key)
+
+#情况1，待删除节点没有子节点
+if currentNode.isLeaf():
+    if currentNode == currentNode.parent.leftChild:
+        currentNode.parent.leftChild = None
+    else:
+        currentNode.parent.rightChild = None
+#情况2，待删除节点只有一个子节点
+    #解决：将这个唯一的子节点上移，替换掉被删节点的位置
+else:
+    if currentNode.hasLeftChild():
+        if currentNode.isLeftChild():
+            currentNode.leftChild.parent = currentNode.parent
+            currentNode.parent.leftChild = currentNode.leftChild
+        elif currentNode.isRightChild():
+            currentNode.rightChild.parent = currentNode.parent
+            currentNode.parent.rightChild = currentNode.rightChild
+        else:
+            currentNode.replaceNodeData(currentNode.leftChild.key,
+                                        currentNode.leftChild.payload,
+                                        currentNode.leftChild.leftChild,
+                                        currentNode.leftChild.rightChild)
+    else:
+        if currentNode.isLeatChild():
+            currentNode.rightChild.parent = currentNode.parent
+            currentNode.parent.leftChild = currentNode.rightChild
+        elif currentNode.isRightChild():
+            currentNode.rightChild.parent = currentNode.parent
+            currentNode.parent.rightChild = currentNode.rightChild
+        else:
+            currentNode.replaceNodeData(currentNode.rightChild.key,
+                                        currentNode.rightChild.payload,
+                                        currentNode.rightChild.leftChild,
+                                        currentNode.rightChild.rightChild)
+#情况3，待删除节点中有两个节点remove方法
+else currentNode.hasBothChildren():
+    succ = currentNode.findSuccessor()
+    succ.spliceOut()
+    currentNode.key = succ.key
+    currentNode.plyload = succ.payload
