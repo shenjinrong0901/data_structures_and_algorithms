@@ -37,15 +37,18 @@
 # print(printexp(x))
 # print(postordereval(x))
 
-import operator
-op = operator.add
-n = op(1,3)
-print(n)
-op1 = operator.mul
-m = op1(1,3)
-print(m)
-op2 = operator.truediv
-o = op2(3,1)
-print(o)
+# import operator
+# op = operator.add
+# n = op(1,3)
+# print(n)
+# op1 = operator.mul
+# m = op1(1,3)
+# print(m)
+# op2 = operator.truediv
+# o = op2(3,1)
+# print(o)
+
+
+print(r"\nwoow")
 
 
