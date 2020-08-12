@@ -12,12 +12,10 @@ class BinarySearchTree:
 class TreeNode:
     def __init__(self,key,val,left=None,right=None,parent=None):
         self.key = key
-
         self.payload = val  #payload为其所包含的数据项，既与键值所关联的一对数据
         self.leftChild = left
         self.rightChild = right
         self.parent = parent   #parent是用来指向其父节点的，方便后面回溯的操作。若不用此方法，也可以用一个堆栈来处理
-
         self.payload = val
         self.leftChild = left
         self.rightChild = right
@@ -136,10 +134,8 @@ def delete(self,key):
         self.size = self.size - 1
     else:
         raise KeyError('Error,key not in tree')
-
 def __delitem__(self,key):          #python内置的特殊方法，来调用delete()
     self.delete(key)
-
 def remove(self,currentNode):
 #情况1，待删除节点没有子节点,也就是只有一个叶子节点
     if currentNode.isLeaf():
