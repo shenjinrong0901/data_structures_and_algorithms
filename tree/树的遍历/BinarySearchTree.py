@@ -141,7 +141,7 @@ def __delitem__(self,key):          #python内置的特殊方法，来调用dele
     self.delete(key)
 
 def remove(self,currentNode):
-#情况1，待删除节点没有子节点
+#情况1，待删除节点没有子节点,也就是只有一个叶子节点
     if currentNode.isLeaf():
         if currentNode == currentNode.parent.leftChild:
             currentNode.parent.leftChild = None
@@ -152,8 +152,9 @@ def remove(self,currentNode):
         succ = currentNode.findSuccessor()
         succ.spliceOut()
         currentNode.key = succ.key
-        currentNode.plyload = succ.payload
+        currentNode.payload = succ.payload
 #情况3，待删除节点只有一个子节点
+  #具体情况  1.被删的节点的子节点是左还是右子节点？ 2.被删节点的本身是其父节点的左还是右子节点？  3.被删的节点是根节点吗？
     #解决：将这个唯一的子节点上移，替换掉被删节点的位置
     else:
         if currentNode.hasLeftChild():
@@ -161,15 +162,15 @@ def remove(self,currentNode):
                 currentNode.leftChild.parent = currentNode.parent
                 currentNode.parent.leftChild = currentNode.leftChild
             elif currentNode.isRightChild():
-                currentNode.rightChild.parent = currentNode.parent
-                currentNode.parent.rightChild = currentNode.rightChild
+                currentNode.leftChild.parent = currentNode.parent
+                currentNode.parent.rightChild = currentNode.leftChild
             else:
              currentNode.replaceNodeData(currentNode.leftChild.key,
                                         currentNode.leftChild.payload,
                                         currentNode.leftChild.leftChild,
                                         currentNode.leftChild.rightChild)
         else:
-            if currentNode.isLeatChild():
+            if currentNode.isLeftChild():
                 currentNode.rightChild.parent = currentNode.parent
                 currentNode.parent.leftChild = currentNode.rightChild
             elif currentNode.isRightChild():
@@ -180,5 +181,44 @@ def remove(self,currentNode):
                                         currentNode.rightChild.payload,
                                         currentNode.rightChild.leftChild,
                                         currentNode.rightChild.rightChild)
+#寻找后继节点
+def findSuccessor(self):
+    succ = None
+    if self.hasRightChild():
+        succ = self.rightChild.findMin()
+    else:
+        if self.parent:
+            if self.isLeftChild():
+                succ = self.parent
+            else:
+                self.parent.rightChild = None
+                succ = self.parent.findSuccessor()
+                self.parent.rightChild = self
+    return succ
 
+def findMin(self):
+    current = self
+    while current.hasLeftChild():
+        current = current.LeftChild
+    return current
+
+def spliceOut(self):
+    if self.isLeaf():
+        if self.isLeftChild():
+            self.parent.leftChild = None
+        else:
+            self.parent.rightChild = None
+    elif self.hasAnyChildren():
+        if self.hasLeftChild():
+            if self.isLeftChild():
+                self.parent.leftChild = self.leftChild
+            else:
+                self.parent.rightChild = self.leftChild
+            self.leftChild.parent = self.parent
+        else:
+            if self.isLeftChild():
+                self.parent.leftChild = self.rightChild
+            else:
+                self.parent.rightChild = self.rightChild
+            self.rightChild.parent = self.parent
 
