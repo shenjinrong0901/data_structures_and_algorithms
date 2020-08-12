@@ -26,44 +26,31 @@ class TreeNode:
         self.leftChild = left
         self.rightChild = right
         self.parent = parent
-
-
     #判断是否拥有左子节点
     def hasLeftChild(self):
         return self.leftChild
-
     #判断是否拥有右子节点
     def hasRightChild(self):
         return self.rightChild
-
     #判断其是不是其父节点的左子节点
     def isLeftChild(self):
         return self.parent and self.parent.leftChild == self
-
     # 判断其是不是其父节点的右子节点
     def isRightChild(self):
         return self.parent and self.parent.rightChild == self
-
     #判断是否是根节点
     def isRoot(self):
         return not self.parent
-
     #判断是否是叶子节点
     def isLeaf(self):
-
         return not (self.rightChild or self.leftChild)
-
         return not (self.rightChild or leftChild)
-
-
     #判断是否有任何子节点
     def hasAnyChildren(self):
         return self.rightChild or self.leftChild
-
     #判断是否同时有左右子节点
     def hasBothChildren(self):
         return self.rightChild and self.leftChild
-
     #将键、值、左子节点、右子节点的值都更换一遍
     def replaceNodeData(self,key,value,lc,rc):
         self.key = key
@@ -96,11 +83,9 @@ def _put(self,key,val,currentNode):
             self._put(key,val,currentNode.rightChild)  #递归右子树
         else:
             currentNode.rightChild = TreeNode(key,val,parent=currentNode)
-
 #索引赋值
 def __setitem__(self,k,v):
     self._put(k,v)
-
 #查找建对应的值
 def get(self,key):
     if self.root:
@@ -111,7 +96,6 @@ def get(self,key):
             return None
     else:
         return None
-
 def _get(self,key,currentNode):
     if not currentNode:
         return None
@@ -121,18 +105,15 @@ def _get(self,key,currentNode):
         return self._get(key,currentNode.leftChild)
     else:                             #如果我们要找的key大于currentNode，则返回该节点的右子树来进行递归
         return self._get(key,currentNode.rightChild)
-
 #索引的取值
 def __getitem__(self,key):            #python内置的一种特殊的方法，对用python中的get方法
     return self.get(key)
-
 #索引的归属判断
 def __contains__(self,key):           #python内置的一种特殊的方法，对应python中的in操作符
     if self.get(key,self.root):
         return True
     else:
         return False
-
 #迭代器，我们可以用for循环来枚举字典中的所有的key
 #已中序遍历的顺序来迭代
 def __iter__(self):                  #python内中的一种特殊的方法，直接调用TreeNode中的同名方法
@@ -144,7 +125,6 @@ def __iter__(self):                  #python内中的一种特殊的方法，直
         if self.hasRightChild():
             for elem in self.rightChild:
                 yield elem
-
 #删除
 #用_get找到要删除的节点，然后调用remove来删除，找不到的话则提示错误
 #注意：在delete中，最复杂的就是找到key对应的节点之后的remove节点的方法！
