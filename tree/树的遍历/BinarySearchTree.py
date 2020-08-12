@@ -154,7 +154,8 @@ def remove(self,currentNode):
         currentNode.key = succ.key
         currentNode.payload = succ.payload
 #情况3，待删除节点只有一个子节点
-  #具体情况  1.被删的节点的子节点是左还是右子节点？ 2.被删节点的本身是其父节点的左还是右子节点？  3.被删的节点是根节点吗？
+  #具体情况
+    # 1.被删的节点的子节点是左还是右子节点？ 2.被删节点的本身是其父节点的左还是右子节点？  3.被删的节点是根节点吗？
     #解决：将这个唯一的子节点上移，替换掉被删节点的位置
     else:
         if currentNode.hasLeftChild():
@@ -195,7 +196,6 @@ def findSuccessor(self):
                 succ = self.parent.findSuccessor()
                 self.parent.rightChild = self
     return succ
-
 def findMin(self):
     current = self
     while current.hasLeftChild():
