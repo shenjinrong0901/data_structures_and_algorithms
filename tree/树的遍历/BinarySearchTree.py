@@ -3,16 +3,12 @@ class BinarySearchTree:
     def __init__(self):
         self.root = None
         self.size = 0
-
     def length(self):
         return self.size
-
     def __len__(self):
         return self.size
-
     def __iter__(self):
         return self.root.__iter__()
-
 class TreeNode:
     def __init__(self,key,val,left=None,right=None,parent=None):
         self.key = key
@@ -61,14 +57,12 @@ class TreeNode:
             self.leftChild.parent = self
         if self.hasRightChild():
             self.rightChild.parent = self
-
 def put(self,key,val):
     if self.root:
         self._put(key,val,self.root)
     else:
         self.root = TreeNode(key,val)
     self.size = self.size + 1
-
 #put辅助方法
 # 如果key比currentNode小，那么_put到左子树，但如果没有左子树，那么key就成为当前节点的左子节点
 # 如果key比currentNode大，那么_put到右子树，但如果没有右子树，那么key就成为当前节点的右子节点
