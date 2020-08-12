@@ -88,12 +88,12 @@ def put(self,key,val):
 def _put(self,key,val,currentNode):
     if key < currentNode.key:
         if currentNode.hasLeftChild():
-            self._put(key,val,currentNode,leftChild) #递归左子树
+            self._put(key,val,currentNode.leftChild) #递归左子树
         else:
             currentNode.leftChild = TreeNode(key,val,parent=currentNode)
     else:
         if currentNode.hasRightChild():
-            self._put(key,val,currentNode,rightChild)  #递归右子树
+            self._put(key,val,currentNode.rightChild)  #递归右子树
         else:
             currentNode.rightChild = TreeNode(key,val,parent=currentNode)
 
@@ -166,42 +166,45 @@ def delete(self,key):
 def __delitem__(self,key):          #python内置的特殊方法，来调用delete()
     self.delete(key)
 
+def remove(self,currentNode):
 #情况1，待删除节点没有子节点
-if currentNode.isLeaf():
-    if currentNode == currentNode.parent.leftChild:
-        currentNode.parent.leftChild = None
-    else:
-        currentNode.parent.rightChild = None
+    if currentNode.isLeaf():
+        if currentNode == currentNode.parent.leftChild:
+            currentNode.parent.leftChild = None
+        else:
+         currentNode.parent.rightChild = None
+#情况3，待删除节点中有两个节点remove方法
+    elif currentNode.hasBothChildren():
+        succ = currentNode.findSuccessor()
+        succ.spliceOut()
+        currentNode.key = succ.key
+        currentNode.plyload = succ.payload
 #情况2，待删除节点只有一个子节点
     #解决：将这个唯一的子节点上移，替换掉被删节点的位置
-else:
-    if currentNode.hasLeftChild():
-        if currentNode.isLeftChild():
-            currentNode.leftChild.parent = currentNode.parent
-            currentNode.parent.leftChild = currentNode.leftChild
-        elif currentNode.isRightChild():
-            currentNode.rightChild.parent = currentNode.parent
-            currentNode.parent.rightChild = currentNode.rightChild
-        else:
-            currentNode.replaceNodeData(currentNode.leftChild.key,
+    else:
+        if currentNode.hasLeftChild():
+            if currentNode.isLeftChild():
+                currentNode.leftChild.parent = currentNode.parent
+                currentNode.parent.leftChild = currentNode.leftChild
+            elif currentNode.isRightChild():
+                currentNode.rightChild.parent = currentNode.parent
+                currentNode.parent.rightChild = currentNode.rightChild
+            else:
+             currentNode.replaceNodeData(currentNode.leftChild.key,
                                         currentNode.leftChild.payload,
                                         currentNode.leftChild.leftChild,
                                         currentNode.leftChild.rightChild)
-    else:
-        if currentNode.isLeatChild():
-            currentNode.rightChild.parent = currentNode.parent
-            currentNode.parent.leftChild = currentNode.rightChild
-        elif currentNode.isRightChild():
-            currentNode.rightChild.parent = currentNode.parent
-            currentNode.parent.rightChild = currentNode.rightChild
         else:
-            currentNode.replaceNodeData(currentNode.rightChild.key,
+            if currentNode.isLeatChild():
+                currentNode.rightChild.parent = currentNode.parent
+                currentNode.parent.leftChild = currentNode.rightChild
+            elif currentNode.isRightChild():
+                currentNode.rightChild.parent = currentNode.parent
+                currentNode.parent.rightChild = currentNode.rightChild
+            else:
+                 currentNode.replaceNodeData(currentNode.rightChild.key,
                                         currentNode.rightChild.payload,
                                         currentNode.rightChild.leftChild,
                                         currentNode.rightChild.rightChild)
-#情况3，待删除节点中有两个节点remove方法
-else currentNode.hasBothChildren():
-    succ = currentNode.findSuccessor()
-    succ.spliceOut()
-    currentNode.key = succ.key
-    currentNode.plyload = succ.payload
+
+
