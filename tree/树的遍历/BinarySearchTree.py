@@ -173,13 +173,13 @@ def remove(self,currentNode):
             currentNode.parent.leftChild = None
         else:
          currentNode.parent.rightChild = None
-#情况3，待删除节点中有两个节点remove方法
+#情况2，待删除节点中有两个节点remove方法
     elif currentNode.hasBothChildren():
         succ = currentNode.findSuccessor()
         succ.spliceOut()
         currentNode.key = succ.key
         currentNode.plyload = succ.payload
-#情况2，待删除节点只有一个子节点
+#情况3，待删除节点只有一个子节点
     #解决：将这个唯一的子节点上移，替换掉被删节点的位置
     else:
         if currentNode.hasLeftChild():
