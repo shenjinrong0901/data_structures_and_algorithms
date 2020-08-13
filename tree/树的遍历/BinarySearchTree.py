@@ -62,20 +62,21 @@ class TreeNode:
             succ = self.rightChild.findMin()
         else:
             if self.parent:
-                if self.isLeftChild():
+                if self.isLeftChild():   #如果当前节点是其父节点的左子树
                     succ = self.parent
                 else:
                     self.parent.rightChild = None
-                    succ = self.parent.findSuccessor()
+                    succ = self.parent.findSuccessor()     #针对其父节点进行一次findSuccessor()的递归
                     self.parent.rightChild = self
         return succ
     #用来查找子树中的最小键，任意二叉树中，最小的键就是最左边的子节点
-        #只需要沿着子树中每个节点的左子树走，直到遇到第一个没有左子节点的节点
+    #只需要沿着子树中每个节点的左子树走，直到遇到第一个没有左子节点的节点
     def findMin(self):
         current = self
         while current.hasLeftChild():
             current = current.LeftChild
-        return current
+        return current    #当找到一个没有左子节点的节点是，就跳出while()循环，返回最新的current值
+    #该方法可以直接访问待拼接的节点，并进行相对应的修该
     def spliceOut(self):
         if self.isLeaf():
             if self.isLeftChild():
@@ -95,6 +96,7 @@ class TreeNode:
                 else:
                     self.parent.rightChild = self.rightChild
                 self.rightChild.parent = self.parent
+
 def put(self,key,val):
     if self.root:
         self._put(key,val,self.root)
