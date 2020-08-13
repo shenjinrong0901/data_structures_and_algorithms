@@ -76,7 +76,6 @@ class TreeNode:
         while current.hasLeftChild():
             current = current.LeftChild
         return current
-
     def spliceOut(self):
         if self.isLeaf():
             if self.isLeftChild():
