@@ -55,12 +55,54 @@ class TreeNode:
             self.leftChild.parent = self
         if self.hasRightChild():
             self.rightChild.parent = self
+
+    # 寻找后继节点，后继节点的子节点必定不能大于1
+    def findSuccessor(self):
+        succ = None
+        if self.hasRightChild():
+            succ = self.rightChild.findMin()
+        else:
+            if self.parent:
+                if self.isLeftChild():
+                    succ = self.parent
+                else:
+                    self.parent.rightChild = None
+                    succ = self.parent.findSuccessor()
+                    self.parent.rightChild = self
+        return succ
+    #用来查找子树中的最小键，任意二叉树中，最小的键就是最左边的子节点
+        #只需要沿着子树中每个节点的左子树走，直到遇到第一个没有左子节点的节点
+    def findMin(self):
+        current = self
+        while current.hasLeftChild():
+            current = current.LeftChild
+        return current
+
+    def spliceOut(self):
+        if self.isLeaf():
+            if self.isLeftChild():
+                self.parent.leftChild = None
+            else:
+                self.parent.rightChild = None
+        elif self.hasAnyChildren():
+            if self.hasLeftChild():
+                if self.isLeftChild():
+                    self.parent.leftChild = self.leftChild
+                else:
+                    self.parent.rightChild = self.leftChild
+                self.leftChild.parent = self.parent
+            else:
+                if self.isLeftChild():
+                    self.parent.leftChild = self.rightChild
+                else:
+                    self.parent.rightChild = self.rightChild
+                self.rightChild.parent = self.parent
 def put(self,key,val):
     if self.root:
         self._put(key,val,self.root)
     else:
         self.root = TreeNode(key,val)
-    self.size = self.size + 1
+    self. size = self.size + 1
 #put辅助方法
 # 如果key比currentNode小，那么_put到左子树，但如果没有左子树，那么key就成为当前节点的左子节点
 # 如果key比currentNode大，那么_put到右子树，但如果没有右子树，那么key就成为当前节点的右子节点
@@ -145,8 +187,8 @@ def remove(self,currentNode):
          currentNode.parent.rightChild = None
 #情况2，待删除节点中有两个节点remove方法
     elif currentNode.hasBothChildren():
-        succ = currentNode.findSuccessor()
-        succ.spliceOut()
+        succ = currentNode.findSuccessor()  #用该方法找到后继子节点
+        succ.spliceOut()     #找到后将其移除到相对应的位置（也就是被删除节点的位置上）
         currentNode.key = succ.key
         currentNode.payload = succ.payload
 #情况3，待删除节点只有一个子节点
@@ -155,65 +197,28 @@ def remove(self,currentNode):
     #解决：将这个唯一的子节点上移，替换掉被删节点的位置
     else:
         if currentNode.hasLeftChild():
-            if currentNode.isLeftChild():
+            if currentNode.isLeftChild():    #在当前节点有左子树，并且自己也是其父节点的左子树的情况下
+                currentNode.leftChild.parent = currentNode.parent    #当前节点左子节点的父节点的引用改为指向当前节点的父节点
+                currentNode.parent.leftChild = currentNode.leftChild  #当前节点的父节点的左子节点的应用改为指向当前节点的左子节点#左子节点删除
+            elif currentNode.isRightChild():  #在当前节点有左子树，并且自己是其父节点的右子树的情况下
                 currentNode.leftChild.parent = currentNode.parent
-                currentNode.parent.leftChild = currentNode.leftChild
-            elif currentNode.isRightChild():
-                currentNode.leftChild.parent = currentNode.parent
-                currentNode.parent.rightChild = currentNode.leftChild
-            else:
+                currentNode.parent.rightChild = currentNode.leftChild   #右子节点删除
+            else:    #当前节点为根节点时，调用replaceNodeData()替换键、值、左右子树
              currentNode.replaceNodeData(currentNode.leftChild.key,
                                         currentNode.leftChild.payload,
                                         currentNode.leftChild.leftChild,
-                                        currentNode.leftChild.rightChild)
+                                        currentNode.leftChild.rightChild)   #根节点删除
         else:
             if currentNode.isLeftChild():
                 currentNode.rightChild.parent = currentNode.parent
-                currentNode.parent.leftChild = currentNode.rightChild
+                currentNode.parent.leftChild = currentNode.rightChild       #左子节点删除
             elif currentNode.isRightChild():
                 currentNode.rightChild.parent = currentNode.parent
-                currentNode.parent.rightChild = currentNode.rightChild
+                currentNode.parent.rightChild = currentNode.rightChild       #右子节点删除
             else:
                  currentNode.replaceNodeData(currentNode.rightChild.key,
                                         currentNode.rightChild.payload,
                                         currentNode.rightChild.leftChild,
-                                        currentNode.rightChild.rightChild)
-#寻找后继节点
-def findSuccessor(self):
-    succ = None
-    if self.hasRightChild():
-        succ = self.rightChild.findMin()
-    else:
-        if self.parent:
-            if self.isLeftChild():
-                succ = self.parent
-            else:
-                self.parent.rightChild = None
-                succ = self.parent.findSuccessor()
-                self.parent.rightChild = self
-    return succ
-def findMin(self):
-    current = self
-    while current.hasLeftChild():
-        current = current.LeftChild
-    return current
-def spliceOut(self):
-    if self.isLeaf():
-        if self.isLeftChild():
-            self.parent.leftChild = None
-        else:
-            self.parent.rightChild = None
-    elif self.hasAnyChildren():
-        if self.hasLeftChild():
-            if self.isLeftChild():
-                self.parent.leftChild = self.leftChild
-            else:
-                self.parent.rightChild = self.leftChild
-            self.leftChild.parent = self.parent
-        else:
-            if self.isLeftChild():
-                self.parent.leftChild = self.rightChild
-            else:
-                self.parent.rightChild = self.rightChild
-            self.rightChild.parent = self.parent
+                                        currentNode.rightChild.rightChild)     #根节点删除
+
 
