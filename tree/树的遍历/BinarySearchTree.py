@@ -55,7 +55,6 @@ class TreeNode:
             self.leftChild.parent = self
         if self.hasRightChild():
             self.rightChild.parent = self
-
     # 寻找后继节点，后继节点的子节点必定不能大于1
     def findSuccessor(self):
         succ = None
