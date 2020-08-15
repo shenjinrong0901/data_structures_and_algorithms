@@ -9,6 +9,21 @@ class BinarySearchTree:
         return self.size
     def __iter__(self):
         return self.root.__iter__()
+
+    # 更新平衡节点
+    def updateBalance(self, node):
+        if node.balanceFactor > 1 or node.balanceFactor < -1:
+            self.rebalance(node)
+            return
+        if node.parent != Node:
+            if node.isLeftChild():
+                node.parent.balanceFactor += 1
+            elif node.isRightChild():
+                node.parent.balanceFactor -= 1
+
+            if node.parent.balanceFactor != 0:
+                self.updateBalance(node.parent)
+                
 class TreeNode:
     def __init__(self,key,val,left=None,right=None,parent=None):
         self.key = key
@@ -97,6 +112,18 @@ class TreeNode:
                     self.parent.rightChild = self.rightChild
                 self.rightChild.parent = self.parent
 
+    # 迭代器，我们可以用for循环来枚举字典中的所有的key
+    # 已中序遍历的顺序来迭代
+    def __iter__(self):  # python内中的一种特殊的方法，直接调用TreeNode中的同名方法
+        if self:  # 根节点不是为空的话
+            if self.hasLeftChild():  # 当左子树不为空
+                for elem in self.leftChild:
+                    yield elem  # 迭代器中，得用yield语句，来返回一个值
+            yield self.key
+            if self.hasRightChild():
+                for elem in self.rightChild:
+                    yield elem
+
 def put(self,key,val):
     if self.root:
         self._put(key,val,self.root)
@@ -112,11 +139,17 @@ def _put(self,key,val,currentNode):
             self._put(key,val,currentNode.leftChild) #递归左子树
         else:
             currentNode.leftChild = TreeNode(key,val,parent=currentNode)
+            #为了AVL树的实现
+            self.updateBalance(currentNode.leftChild)
     else:
         if currentNode.hasRightChild():
             self._put(key,val,currentNode.rightChild)  #递归右子树
         else:
             currentNode.rightChild = TreeNode(key,val,parent=currentNode)
+            # 为了AVL树的实现
+            self.updateBalance(currentNode.rightChild)
+
+
 #索引赋值
 def __setitem__(self,k,v):
     self._put(k,v)
@@ -148,17 +181,7 @@ def __contains__(self,key):           #python内置的一种特殊的方法，�
         return True
     else:
         return False
-#迭代器，我们可以用for循环来枚举字典中的所有的key
-#已中序遍历的顺序来迭代
-def __iter__(self):                  #python内中的一种特殊的方法，直接调用TreeNode中的同名方法
-    if self:                         #根节点不是为空的话
-        if self.hasLeftChild():      #当左子树不为空
-            for elem in self.leftChild:
-                yield elem           #迭代器中，得用yield语句，来返回一个值
-        yield self.key
-        if self.hasRightChild():
-            for elem in self.rightChild:
-                yield elem
+
 #删除
 #用_get找到要删除的节点，然后调用remove来删除，找不到的话则提示错误
 #注意：在delete中，最复杂的就是找到key对应的节点之后的remove节点的方法！
