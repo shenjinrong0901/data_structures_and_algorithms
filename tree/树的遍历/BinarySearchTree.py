@@ -9,7 +9,6 @@ class BinarySearchTree:
         return self.size
     def __iter__(self):
         return self.root.__iter__()
-
     # 更新平衡节点
     def updateBalance(self, node):
         if node.balanceFactor > 1 or node.balanceFactor < -1:
@@ -23,7 +22,7 @@ class BinarySearchTree:
 
             if node.parent.balanceFactor != 0:
                 self.updateBalance(node.parent)
-                
+
 class TreeNode:
     def __init__(self,key,val,left=None,right=None,parent=None):
         self.key = key
