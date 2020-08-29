@@ -243,4 +243,22 @@ def remove(self,currentNode):
                                         currentNode.rightChild.leftChild,
                                         currentNode.rightChild.rightChild)     #根节点删除
 
+#AVL树种的左旋
+def rotateLeft(self,rotRoot):
+    newRoot = rotRoot.rightChild
+    rotRoot.rightChild = newRoot.leftChild
+    if newRoot.leftChild != None:    #如果新根节点已经存在左子节点
+        newRoot.leftChild.parent = rotRoot
+    newRoot.parent = rotRoot.parent
+    if rotRoot.isRoot():
+        self.root = newRoot
+    else:
+        if rotRoot.isLeftChild():
+            rotRoot.parent.leftChild = newRoot
+        else:
+            rotRoot.parent.rightChild = newRoot
+        newRoot.leftChild = rotRoot
+        rotRoot.parent = newRoot
+        rotRoot.balanceFactor = rotRoot.balanceFactor + 1 - min(newRoot.balanceFactor,0)
+        newRoot.balanceFactor = newRoot.balanceFactor + 1 - max(rotRoot.balanceFactor,0)
 
