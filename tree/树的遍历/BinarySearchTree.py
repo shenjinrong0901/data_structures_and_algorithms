@@ -9,10 +9,11 @@ class BinarySearchTree:
         return self.size
     def __iter__(self):
         return self.root.__iter__()
+
     # 更新平衡节点
     def updateBalance(self, node):
         if node.balanceFactor > 1 or node.balanceFactor < -1:
-            self.rebalance(node)
+            self.rebalance(node)        #若平衡因子不在-1~1的范围内，则需要重新平衡
             return
         if node.parent != Node:
             if node.isLeftChild():
@@ -21,7 +22,7 @@ class BinarySearchTree:
                 node.parent.balanceFactor -= 1
 
             if node.parent.balanceFactor != 0:
-                self.updateBalance(node.parent)
+                self.updateBalance(node.parent)   #调整父节点的因子
 
 class TreeNode:
     def __init__(self,key,val,left=None,right=None,parent=None):
@@ -245,20 +246,35 @@ def remove(self,currentNode):
 
 #AVL树种的左旋
 def rotateLeft(self,rotRoot):
-    newRoot = rotRoot.rightChild
-    rotRoot.rightChild = newRoot.leftChild
+    newRoot = rotRoot.rightChild       #定义新根节点，既在左旋中，新的根节点为旧的根节点的右子节点
+    rotRoot.rightChild = newRoot.leftChild      #将旧的根节点的右子节点指向新的根节点的左子节点（位置上的指向）
     if newRoot.leftChild != None:    #如果新根节点已经存在左子节点
         newRoot.leftChild.parent = rotRoot
     newRoot.parent = rotRoot.parent
-    if rotRoot.isRoot():
-        self.root = newRoot
-    else:
-        if rotRoot.isLeftChild():
-            rotRoot.parent.leftChild = newRoot
+    if rotRoot.isRoot():       #若旧节点是数根
+        self.root = newRoot     #则需要确定新的数根
+    else:                       #若旧节点不是树根
+        if rotRoot.isLeftChild():   #则根据判断该旧节点原来父节点的左子节点还是右子节点
+            rotRoot.parent.leftChild = newRoot      #来调整新的根节点的方向
         else:
             rotRoot.parent.rightChild = newRoot
         newRoot.leftChild = rotRoot
         rotRoot.parent = newRoot
+        #用来调整平衡因子
         rotRoot.balanceFactor = rotRoot.balanceFactor + 1 - min(newRoot.balanceFactor,0)
-        newRoot.balanceFactor = newRoot.balanceFactor + 1 - max(rotRoot.balanceFactor,0)
+        newRoot.balanceFactor = newRoot.balanceFactor + 1 + max(rotRoot.balanceFactor,0)
 
+#rebalance重新平衡,主要手段，将不平衡的树进行旋转，根据"左重"或者"右重"来选择旋转的方向
+def rebalance(self,node):
+    if node.balanceFactor < 0:      #当平衡因子小于0，说明是"右重"需要左旋
+        if node.rightChild.balanceFactor > 0:   #在实施左旋之前，得先检查它的右子节点是否为"左重"
+            self.rotateRight(node.rightChild)   #右子节点"左重"先右旋
+            self.rotateLeft(node)
+        else:
+            self.rotateLeft(node)           #右子节点不是"左重"，只需要一个单纯的左旋就可以了
+    elif node.balanceFactor > 0:    #"左重"需要右旋
+        if node.leftChild.balanceFactor < 0:
+            self.rotateLeft(node.leftChild)     #左子节点"右重"先左旋
+            self.rotateRight(node)
+        else:
+            self.rotateRight(node)
