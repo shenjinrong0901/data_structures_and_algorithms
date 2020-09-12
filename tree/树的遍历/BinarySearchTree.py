@@ -1,4 +1,4 @@
-#插入的顺序不同，生成的BST（二叉查找树）也不同
+#插入的顺序不同，生成的BST（二叉查找树）也不同，AVL平衡二叉查找树
 class BinarySearchTree:
     def __init__(self):
         self.root = None

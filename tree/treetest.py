@@ -1,54 +1,17 @@
-# import operator
-# op = operator.add
-# n = op(1,2)
-# print(n)
+def twoSum(nums, target):
+    lens = len(nums)
+    j=-1
+    for i in range(lens):
+        if (target - nums[i]) in nums:
+            if (nums.count(target - nums[i]) == 1)&(target - nums[i] == nums[i]):#如果num2=num1,且nums中只出现了一次，说明找到是num1本身。
+                continue
+            else:
+                j = nums.index(target - nums[i],i+1) #index(x,i+1)是从num1后的序列后找num2
+                break
+    if j>0:
+        return [i,j]
+    else:
+        return []
 
-
-# from pythonds.trees import BinaryTree
-# import operator
-#
-# def printexp(tree):
-#     sVal = ""
-#     if tree:
-#         sVal = '(' + printexp(tree.getLeftChild())
-#         sVal = sVal + str(tree.getRootVal())
-#         sVal = sVal + printexp(tree.getRightChild()) + ')'
-#     return sVal
-#
-# def postordereval(tree):
-#     opers = {'+':operator.add, '-':operator.sub,\
-#              '*':operator.mul, '/':operator.truediv}
-#     res1 = None
-#     res2 = None
-#     if tree:
-#         res1 = postordereval(tree.getLeftChild())
-#         res2 = postordereval(tree.getRightChild())
-#         if res1 and res2:
-#             return opers[tree.getRootVal()](res1,res2)
-#         else:
-#             return tree.getRootVal()
-#
-# x = BinaryTree('*')
-# x.insertLeft('+')
-# l = x.getLeftChild()
-# l.insertLeft(4)
-# l.insertRight(5)
-# x.insertRight(7)
-# print(printexp(x))
-# print(postordereval(x))
-
-# import operator
-# op = operator.add
-# n = op(1,3)
-# print(n)
-# op1 = operator.mul
-# m = op1(1,3)
-# print(m)
-# op2 = operator.truediv
-# o = op2(3,1)
-# print(o)
-
-
-print(r"\nwoow")
 
 
